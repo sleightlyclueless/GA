@@ -6,69 +6,85 @@ import java.util.LinkedList;
 import java.util.List;
 
 
+
 public class Folding {
 
   /* Attributes */
-  private final List<Direction> directions; /* Consists out of the directions of the points in their given sequence */
-  private int overlaps = 0; /* Counter for overlaps */
-  private int energy = 0; /* Counter for energy */
-  private float fitness = -1; /* Counter for fitness of folding */
+  /* Consists out of the directions of the points in their given sequence */
+  private final List<Direction> directions;
+  /* Counter for overlaps */
+  private int overlaps = 0;
+  /* Counter for energy */
+  private int energy = 0;
+  /* Counter for fitness of folding */
+  private float fitness = -1;
 
   /* Getters */
+
+  public List<Direction> getDirections() {return this.directions;}
   public int getOverlaps()  {return this.overlaps;}
   public int getEnergy()    {return this.energy;}
   public float getFitness() {return this.fitness;}
 
 
   /* Constructor */
-  public Folding(String seq, List<Direction> directions) {
+  public Folding(List<Direction> directions) {
     this.directions = new LinkedList<>();
     this.directions.addAll(directions);
-    this.fitness = analyzeFolding(seq); /* Calculate overlaps and energy => fitness */
   }
 
 
   /* Functions */
   /* Depending on the directions and seq given, calculate overlaps and energy => fitness */
-  public float analyzeFolding(String seq) {
+  public float analyzeFolding(String sequence) {
 
     /* Sequence and directions have to match in order for successful folding generation */
-    if (this.directions.size() + 1 != seq.length()) return -1;
+    if (this.directions.size() + 1 != sequence.length()) return -1;
 
+    /* If theres already a fitness we elavuated already */
     if (this.fitness >= 0) return fitness;
 
 
-    Point currentPosition = new Point(0, 0);                                                  // Start at 0/0 and in function iterate to according position
-    Point currDelta = new Point(0, 1);                                                        // Standard is move up by 0/1
+    // Start at 0/0 and in function iterate to according position
+    Point currentPosition = new Point(0, 0);
+    // Standard move is move up by 0/1 -> will be altered by changeDeltaVector
+    Point currDelta = new Point(0, 1);
 
 
 
-    // Iterate through all the given directions and calculate new Point in folding from there
-    for (int i = 0; i < this.directions.size(); i++) {                                              // MOVE THROUGH ALL THE POINTS IN FOLDING
+    // MOVE THROUGH ALL THE POINTS IN FOLDING and calculate values in following points in folding
+    for (int i = 0; i < this.directions.size(); i++) {
       System.out.println("Curr: " + currentPosition);
-      Point iteratePosition = new Point(currentPosition.x, currentPosition.y);                      // Start at 0/0
-      Point backupDelta = new Point(currDelta.x, currDelta.y);                                      // Change from this delta over again(!!!!)
+      // Start at 0/0
+      Point iteratePosition = new Point(currentPosition.x, currentPosition.y);
+      // Change delta vector
+      // Also needs to be backed up to change from here with next iteration over again(!!!!)
+      Point backupDelta = new Point(currDelta.x, currDelta.y);
 
-      for (int j = i; j < this.directions.size(); j++) {                                            // FOR ALL FUTURE POSITIONS CHECK IF ONE IS AN OVERLAP AND OR HYDROPHOBIC CONNECTION
-        changeDeltaVector(backupDelta, this.directions.get(j));                                     // calculate next delta vector (0/1, 0/-1, 1/0, 1/1)
-        moveToNextPositions(iteratePosition, backupDelta);                                          // depending on the current delta change next position
+      // FOR ALL FUTURE POSITIONS CHECK IF ONE IS AN OVERLAP AND OR HYDROPHOBIC CONNECTION
+      for (int j = i; j < this.directions.size(); j++) {
+        // calculate next delta vector (0/1, 0/-1, 1/0, 1/1)
+        changeDeltaVector(backupDelta, this.directions.get(j));
+        // depending on the current delta change next position
+        moveToNextPositions(iteratePosition, backupDelta);
 
-        if (j > i) {                                                                                // Check for overlaps and energy
+        // For this new position check for overlaps and energy
+        if (j > i) {
           if (currentPosition.equals(iteratePosition)) overlaps++;
-          if (seq.charAt(i) == '1' && isNeighbour(currentPosition, iteratePosition) && seq.charAt(j + 1) == '1') energy++;
+          if (sequence.charAt(i) == '1' && sequence.charAt(j + 1) == '1' && isNeighbour(currentPosition, iteratePosition)) energy++;
         }
 
-        System.out.println(iteratePosition);
+        System.out.println("Next: " + iteratePosition);
       }
 
       System.out.println("==============================");
 
+      // Move on to next point with the previous delta vector and check all its following ones
       changeDeltaVector(currDelta, this.directions.get(i));
       moveToNextPositions(currentPosition, currDelta);
     }
 
-
-    this.fitness = energy - overlaps;
+    this.fitness = (float)energy / (float)(overlaps+1);
     return this.fitness;
   }
 
@@ -106,7 +122,8 @@ public class Folding {
 
   // Check if the distance between two points, depending on their x and y position, is adjacent
   private boolean isNeighbour(Point pos2, Point pos1) {
-    double dist = Math.sqrt(Math.pow(pos1.x - pos2.x, 2) + Math.pow(pos1.y - pos2.y, 2)); // Calculate positive hypothenuse (straight ~= 1, diagonal ~= 1.4, overlapping ~= 0)
+    // Calculate positive hypothenuses around a square, with a neighbours straight = 1, diagonal ~= 1.4, overlapping ~= 0
+    double dist = Math.sqrt(Math.pow(pos1.x - pos2.x, 2) + Math.pow(pos1.y - pos2.y, 2));
     return dist == 1;
   }
 
@@ -132,7 +149,8 @@ public class Folding {
     Point position = new Point(0, 0);
 
     for (int i = 0; i < index; i++) {
-      changeDeltaVector(currentDirectionDelta, this.directions.get(i));                             // calculate next delta vector (0/1, 0/-1, 1/0, 1/1)
+      // calculate next delta vector (0/1, 0/-1, 1/0, 1/1)
+      changeDeltaVector(currentDirectionDelta, this.directions.get(i));
       moveToNextPositions(position, currentDirectionDelta);
     }
 
@@ -148,7 +166,8 @@ public class Folding {
     Point minValue = new Point(0, 0);
 
     for (Direction currentDirection : this.directions) {
-      changeDeltaVector(currentDirectionDelta, currentDirection);                                   // calculate next delta vector (0/1, 0/-1, 1/0, 1/1)
+      // calculate next delta vector (0/1, 0/-1, 1/0, 1/1)
+      changeDeltaVector(currentDirectionDelta, currentDirection);
       moveToNextPositions(position, currentDirectionDelta);
       if (position.x < minValue.x)
         minValue.x = position.x;
@@ -168,7 +187,8 @@ public class Folding {
     Point maxValue = new Point(0, 0);
 
     for (Direction currentDirection : this.directions) {
-      changeDeltaVector(currentDirectionDelta, currentDirection);                                   // calculate next delta vector (0/1, 0/-1, 1/0, 1/1)
+      // calculate next delta vector (0/1, 0/-1, 1/0, 1/1)
+      changeDeltaVector(currentDirectionDelta, currentDirection);
       moveToNextPositions(position, currentDirectionDelta);
       if (position.x > maxValue.x)
         maxValue.x = position.x;

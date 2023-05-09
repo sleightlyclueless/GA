@@ -4,7 +4,7 @@ package Util;
 public class Point {
   public int x, y;
 
-  /* Coordinates for their position */
+  /* Constructor with coordinates for their position */
   public Point(int x, int y) {
     this.x = x;
     this.y = y;

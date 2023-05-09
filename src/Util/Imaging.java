@@ -24,7 +24,7 @@ public class Imaging {
     // ================================================
     // Calculate height and width of the image
     int height = 100 * (_max.y - _min.y) + ((s.length()-1) * 5) + 10;
-    int width = 100 * (_max.x - _min.x) + ((s.length()-1) * 3);
+    int width = 100 * (_max.x - _min.x) + ((s.length()-1) * 5)  - 11;
 
     // Create an image with rgb values of the calculated width and height
     BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
@@ -72,7 +72,7 @@ public class Imaging {
     int yStart = (node.y * PixelScale) * -1; // inverse due to origin being top left and y inversed to conventional grid
     if (_max.y > 0 ) yStart = yStart + (_max.y * PixelScale);
 
-    graphics.setColor(isHydrophobic ? Color.BLACK : Color.WHITE);
+    graphics.setColor(isHydrophobic ? Color.BLACK : Color.LIGHT_GRAY);
     graphics.fillRect(xStart + 5, yStart + 5, PixelScale - 10, PixelScale - 10);
     System.out.printf("(%d / %d)\n", xStart, yStart);
 
@@ -82,12 +82,10 @@ public class Imaging {
     graphics.setColor(Color.WHITE);
     if (overlaps > 0) {
       //System.out.println("drawing...");
-      graphics.drawString(String.valueOf(overlaps), xStart + PixelScale / 3, yStart + PixelScale / 3);
+      graphics.drawString("Overl.: " + String.valueOf(overlaps), ((xStart + PixelScale / 3) - 15), (yStart + PixelScale / 3) + 38);
     }
-    if(id == 0)
-      graphics.drawString("Start:", (xStart + (PixelScale - 10) / 3),(yStart + (PixelScale - 10) / 3));
-    if(id  == sequence.length()-1)
-      graphics.drawString("End:", (xStart + (PixelScale - 10) / 3),(yStart + (PixelScale - 10) / 3));
+    graphics.setColor(isHydrophobic ? Color.WHITE : Color.BLACK);
+    graphics.drawString(Integer.toString(id), (xStart + (PixelScale) / 3 + 12),(yStart + (PixelScale + 50) / 3));
   }
 
   private void drawConnections(Graphics graphics, Folding folding) {
