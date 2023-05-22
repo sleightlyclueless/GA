@@ -1,24 +1,46 @@
-import Util.Folding;
+import Base.Folding;
+import Util.GeneticAlgorithm;
 import Util.Imaging;
-import Util.Point.Direction;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.List;
 
 public class Main {
-
   public static void main(String[] args) throws IOException {
+
+    int popultationSize = 100;
+    int generations = 100;
     Imaging i = new Imaging();
+
+    // SEQUENCE
+    String sequence = chooseStartSequence();
+
+    GeneticAlgorithm ga = new GeneticAlgorithm(generations, popultationSize, sequence);
+
+    Folding best = ga.findBestFolding();
+    i.drawFolding(best, sequence, "best_folding_gen_final.png");
+  }
+
+  private static String chooseStartSequence() throws IOException {
+    BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+
     // 0 - hydrophil | 1 - hydrophobe
-    String sequence = "10110001";
+    List<String> sequences = Arrays.asList(
+        "101001101010101",               // Seq15
+        "10100110100100110101",          // Seq20
+        "1010011010010011011010101",     // Seq25
+        "101001101001001101101010110101" // Seq30
+    );
 
-    Folding f1 = new Folding(List.of(Direction.Straight, Direction.Left, Direction.Left, Direction.Right, Direction.Right, Direction.Straight, Direction.Right));
-    f1.analyzeFolding(sequence);
-    System.out.printf("Fitness 1: %f\nOverlaps 1: %d\nEnergy 1: %d\n%n", f1.getFitness(), f1.getOverlaps(), f1.getEnergy());
-    i.drawFolding(f1, sequence, "folding1.png");
+    int counter = 0;
+    for (String s : sequences)
+      System.out.println(String.format("[%d] %s", counter++, s));
 
-    Folding f2 = new Folding(List.of(Direction.Straight,Direction.Left, Direction.Left, Direction.Right, Direction.Left, Direction.Left, Direction.Left));
-    f2.analyzeFolding(sequence);
-    System.out.printf("Fitness 2: %f\nOverlaps 2: %d\nEnergy 2: %d\n%n", f2.getFitness(), f2.getOverlaps(), f2.getEnergy());
-    i.drawFolding(f2, sequence, "folding2.png");
+    System.out.println("Please select one of the sequences my number");
+    int selection = Integer.parseInt(reader.readLine());
+
+    return sequences.get(selection);
   }
 }

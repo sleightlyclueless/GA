@@ -1,5 +1,7 @@
 package Util;
 
+import Base.Folding;
+import Base.Point;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -10,8 +12,8 @@ public class Imaging {
   private final int PixelScale = 75;
   private Folding folding;
   private String sequence;
-  private Point _min;                                             // smallest coordinates in folding
-  private Point _max;                                             // max coordinates in folding
+  private Base.Point _min;                                             // smallest coordinates in folding
+  private Base.Point _max;                                             // max coordinates in folding
 
 
   public void drawFolding(Folding f, String s, String filename) {
@@ -74,14 +76,12 @@ public class Imaging {
 
     graphics.setColor(isHydrophobic ? Color.BLACK : Color.LIGHT_GRAY);
     graphics.fillRect(xStart + 5, yStart + 5, PixelScale - 10, PixelScale - 10);
-    System.out.printf("(%d / %d)\n", xStart, yStart);
 
 
     // Check for overlaps
     int overlaps = folding.getOverlapsAtPosition(id);
     graphics.setColor(Color.WHITE);
     if (overlaps > 0) {
-      //System.out.println("drawing...");
       graphics.drawString("Overl.: " + String.valueOf(overlaps), ((xStart + PixelScale / 3) - 15), (yStart + PixelScale / 3) + 38);
     }
     graphics.setColor(isHydrophobic ? Color.WHITE : Color.BLACK);

@@ -1,10 +1,8 @@
-package Util;
+/* Consisting out of Point + Direction -> Next point. A protein folding is generated and by walking down these points we evaluate its fitness = energy / overlaps */
+package Base;
 
-
-import Util.Point.*;
 import java.util.LinkedList;
 import java.util.List;
-
 
 
 public class Folding {
@@ -20,11 +18,9 @@ public class Folding {
   private float fitness = -1;
 
   /* Getters */
-
-  public List<Direction> getDirections() {return this.directions;}
-  public int getOverlaps()  {return this.overlaps;}
-  public int getEnergy()    {return this.energy;}
-  public float getFitness() {return this.fitness;}
+  public List<Direction> getDirections()  {return this.directions;}
+  public int getOverlaps()                {return this.overlaps;}
+  public int getEnergy()                  {return this.energy;}
 
 
   /* Constructor */
@@ -54,7 +50,6 @@ public class Folding {
 
     // MOVE THROUGH ALL THE POINTS IN FOLDING and calculate values in following points in folding
     for (int i = 0; i < this.directions.size(); i++) {
-      System.out.println("Curr: " + currentPosition);
       // Start at 0/0
       Point iteratePosition = new Point(currentPosition.x, currentPosition.y);
       // Change delta vector
@@ -73,11 +68,7 @@ public class Folding {
           if (currentPosition.equals(iteratePosition)) overlaps++;
           if (sequence.charAt(i) == '1' && sequence.charAt(j + 1) == '1' && isNeighbour(currentPosition, iteratePosition)) energy++;
         }
-
-        System.out.println("Next: " + iteratePosition);
       }
-
-      System.out.println("==============================");
 
       // Move on to next point with the previous delta vector and check all its following ones
       changeDeltaVector(currDelta, this.directions.get(i));
@@ -199,4 +190,7 @@ public class Folding {
 
     return maxValue;
   }
+
+
+  // TODO: mutate & crossover
 }
