@@ -12,16 +12,17 @@ public class Population {
   private final int populationSize;
 
   /* Getters */
-  public String getSequence() {return sequence;}
-  public List<Folding> getGeneration() {return generation;}
+  public String getSequence() { return sequence; }
+  public List<Folding> getGeneration() { return generation; }
 
 
   /* Constructor */
   /* Initial constructor */
-  public Population(String sequence, int elements) {
-    this.populationSize = elements;
+  public Population(String sequence, int populationSize) {
+    this.populationSize = populationSize;
     this.sequence = sequence;
     this.generation = new LinkedList<>();
+    // Call to randomPopulation in GeneticAlgorithm
   }
 
   /* Used for next generations */
