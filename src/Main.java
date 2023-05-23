@@ -46,3 +46,12 @@ public class Main {
     return sequences.get(selection);
   }
 }
+
+// NOTE: CSV -> GRAPH:
+// 1. Open csv in excel
+// 2. Spalten auswählen
+// 3. Einfügen -> Empfohlene Graphik
+// 4. Linie
+
+
+// Fitness - Proportionale Selektion ohne Mutation & Crossover - irgendwann nur noch Klone

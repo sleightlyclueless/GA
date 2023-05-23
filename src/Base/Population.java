@@ -25,14 +25,13 @@ public class Population {
     // Call to randomPopulation in GeneticAlgorithm
   }
 
-  /* Used for next generations */
+  /* Used for next generations - copy constructor */
   public Population(String sequence, List<Folding> folding) {
     this.sequence = sequence;
     this.populationSize = folding.size();
     this.generation = new LinkedList<>();
-    for (Folding f : folding) {
+    for (Folding f : folding)
       this.generation.add(new Folding(f.getDirections()));
-    }
   }
 
 
@@ -41,10 +40,10 @@ public class Population {
   public static Population randomPopulation(String sequence, int elements) {
     Population population = new Population(sequence, elements);
 
-    // move as many foldings as populationsize is required
+    // for as many foldings as populationsize is required
     for (int i = 0; i < population.populationSize; i++) {
 
-      // Generate random Folding directions
+      // Generate random Folding directions for each candidate
       List<Direction> randomDirections = new LinkedList<>();
       for (int j = 0; j < sequence.length() - 1; j++)
         randomDirections.add(Direction.getRandomDirection());
@@ -57,7 +56,7 @@ public class Population {
     return population;
   }
 
-
+  // ======= UTIL FOR PRINT AND FINDING BEST CANDIDATE OF EACH AND CUMULATIVE =======
   // move through all foldings of this population and get the one with highest fitness (retval from analyze)
   public Folding getBestFolding() {
     Folding bestFolding = this.generation.get(0);
