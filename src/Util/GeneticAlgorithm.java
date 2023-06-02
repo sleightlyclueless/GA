@@ -24,7 +24,7 @@ public class GeneticAlgorithm {
   static {
     try {
       writer = Files.newBufferedWriter(Paths.get("results.csv"));
-      writer.write("GenNo., GenAvFit., FitBestGenCan., FitBestAll., BestEnergyAll, BestOverlapAll\n");
+      writer.write("GenNo.; GenAvFit.; FitBestGenCan.; FitBestAll.; BestEnergyAll; BestOverlapAll\n");
     } catch (IOException e) {
       e.printStackTrace();
     }
