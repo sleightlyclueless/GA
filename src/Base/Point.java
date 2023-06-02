@@ -1,6 +1,8 @@
 /* Base 2 - Point class, representing a point in a folding with its x and y pos being calculated in a folding from prev-pos + delta-vector out of directions */
 package Base;
 
+// P1
+// ================================================================================================================
 /* Class for points in 2d dimension */
 public class Point {
   public int x, y;

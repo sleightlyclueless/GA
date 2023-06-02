@@ -16,8 +16,10 @@ public class Main {
 
     // SEQUENCE
     String sequence = chooseStartSequence();
+    float mutationRate = 0.1f;
+    float crossoverRate = 0.25f;
 
-    GeneticAlgorithm ga = new GeneticAlgorithm(generations, popultationSize, sequence);
+    GeneticAlgorithm ga = new GeneticAlgorithm(generations, popultationSize, sequence, mutationRate, crossoverRate);
 
     Folding best = ga.findBestFolding();
     i.drawFolding(best, sequence, "best_folding_gen_final.png");

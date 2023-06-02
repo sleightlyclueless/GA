@@ -17,6 +17,9 @@ public class GeneticAlgorithm {
   private Population population;
   private static BufferedWriter writer; // for the csv
 
+  private float mutationRate = 0;
+  private float crossoverRate = 0;
+
   /* headline for csv only static once */
   static {
     try {
@@ -28,9 +31,17 @@ public class GeneticAlgorithm {
   }
 
   /* Constructor */
-  public GeneticAlgorithm(int maxGen, int elementsPerGen, String sequence) {
+  public GeneticAlgorithm(int maxGen, int elementsPerGen, String sequence, float mutationRate, float crossoverRate) {
     maxGenerations = maxGen;
     population = Population.randomPopulation(sequence, elementsPerGen);                             // 1. Random start population
+
+    // P3
+    // ================================================================================================================
+    this.mutationRate = mutationRate;
+    this.crossoverRate = crossoverRate;
+    population.setMutationRate(mutationRate);
+    population.setCrossoverRate(crossoverRate);
+    // ================================================================================================================
   }
 
 
@@ -53,6 +64,15 @@ public class GeneticAlgorithm {
         bestFolding = population.getBestFolding();
 
       population = new Population(population.getSequence(), fitnessProportionateSelection(population)); // 4. find best candidates and move on to next generation
+
+      // P3
+      // ================================================================================================================
+      population.setMutationRate(mutationRate);
+      population.setCrossoverRate(crossoverRate);
+      population.crossover();
+      population.mutation();
+      // ================================================================================================================
+
       genCounter++;
     }
 
@@ -67,7 +87,7 @@ public class GeneticAlgorithm {
 
   private void logGeneration(int currentGen) {
     try {
-      String formatString = String.format("%d,%f,%f,%f,%d,%d\n",
+      String formatString = String.format("%d;%f;%f;%f;%d;%d\n",
           currentGen,                                           // Generation Number
           population.getAverageFitness(),                       // Average Fitness of Generation
           population.getFitnessOfBestFolding(),                 // Fitness of best candidate of Generation

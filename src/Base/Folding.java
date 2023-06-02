@@ -1,10 +1,14 @@
 /* Consisting out of Point + Direction -> Next point. A protein folding is generated and by walking down these points we evaluate its fitness = energy / overlaps */
 package Base;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 
+// P1
+// ================================================================================================================
 public class Folding {
 
   /* Attributes */
@@ -192,5 +196,28 @@ public class Folding {
   }
 
 
-  // TODO: mutate & crossover
+  // P3
+  // ================================================================================================================
+  // Mutate a direction at a random place of the folding
+  public void mutate() {
+    int position = new Random().nextInt(directions.size());
+    this.directions.set(position, Direction.getRandomDirection());
+    this.fitness = -1; // reset fitness to -1 for another analyze
+  }
+
+
+  // Crossover directions of two foldings of same size (we have the same sequence, nothing to change here)
+  public void crossover(Folding toCrossoverWith, int positionToCross) {
+    int size = directions.size();
+
+    List<Direction> tmp = new ArrayList<>(toCrossoverWith.getDirections().subList(positionToCross, size)); // save crossover content of other folding
+
+    for (int i = positionToCross; i < size; i++) {
+      toCrossoverWith.directions.set(i, directions.get(i)); // set directions of other folding
+      directions.set(i, tmp.get(i - positionToCross));      // set directions of this folding from tmp
+    }
+
+    this.fitness = -1; // reset fitness of both to -1 for next evaluation
+    toCrossoverWith.fitness = -1;
+  }
 }

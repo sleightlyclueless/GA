@@ -2,8 +2,11 @@ package Base;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 
+// P2
+// ================================================================================================================
 public class Population {
 
   /* Attributes */
@@ -14,6 +17,19 @@ public class Population {
   /* Getters */
   public String getSequence() { return sequence; }
   public List<Folding> getGeneration() { return generation; }
+
+
+  // P3
+  // ================================================================================================================
+  private float mutationRate = 0;
+  private float crossoverRate = 0;
+  /* Getters */
+  public float getMutationRate() { return mutationRate; }
+  public float getCrossoverRate() { return crossoverRate; }
+  /* Setters */
+  public void setMutationRate(float mutationRate) { this.mutationRate = mutationRate; }
+  public void setCrossoverRate(float crossoverRate) { this.crossoverRate = crossoverRate; }
+  // ================================================================================================================
 
 
   /* Constructor */
@@ -83,5 +99,35 @@ public class Population {
   public float getAverageFitness() {
     return (float) this.generation.stream().mapToDouble(f -> f.analyzeFolding(this.sequence)).average().orElse(0);
   }
+
+
+  // P3
+  // ================================================================================================================
+  public void mutation() {
+    Random rng = new Random();
+    int elementsToMutate = calculateElements(this.mutationRate);
+    System.out.println(String.format("Mutating %d elements", elementsToMutate));
+    for (int i = 0; i < elementsToMutate; i++) {
+      generation.get(rng.nextInt(populationSize)).mutate();
+    }
+  }
+
+  public void crossover() {
+    int toCrossover = calculateElements(this.crossoverRate);
+    Random rng = new Random();
+    for (int i = 0; i < toCrossover; i++) {
+      int f1 = rng.nextInt(sequence.length());
+      int f2 = rng.nextInt(sequence.length());
+      if (f1 == f2)
+        continue;
+      int positionToCross = rng.nextInt(sequence.length());
+      generation.get(f1).crossover(generation.get(f2), positionToCross);
+    }
+  }
+
+  private int calculateElements(float rate) {
+    return (int) (sequence.length() * populationSize * rate);
+  }
+  // ================================================================================================================
 }
 
