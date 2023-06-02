@@ -17,8 +17,8 @@ public class GeneticAlgorithm {
   private Population population;
   private static BufferedWriter writer; // for the csv
 
-  private float mutationRate = 0;
-  private float crossoverRate = 0;
+  private final float mutationRate = 0.01f;
+  private final float crossoverRate = 0.25f;
 
   /* headline for csv only static once */
   static {
@@ -31,15 +31,13 @@ public class GeneticAlgorithm {
   }
 
   /* Constructor */
-  public GeneticAlgorithm(int maxGen, int elementsPerGen, String sequence, float mutationRate, float crossoverRate) {
+  public GeneticAlgorithm(int maxGen, int elementsPerGen, String sequence) {
     maxGenerations = maxGen;
     population = Population.randomPopulation(sequence, elementsPerGen);                             // 1. Random start population
 
     // P3
     // ================================================================================================================
-    this.mutationRate = mutationRate;
-    this.crossoverRate = crossoverRate;
-    population.setMutationRate(mutationRate);
+    population.setMutationRate(mutationRate); // initial mutation rate
     population.setCrossoverRate(crossoverRate);
     // ================================================================================================================
   }
@@ -69,6 +67,7 @@ public class GeneticAlgorithm {
       // ================================================================================================================
       population.setMutationRate(mutationRate);
       population.setCrossoverRate(crossoverRate);
+      System.out.println(String.format("Generation #%d, Mutation Rate: %f", genCounter, population.getMutationRate()));
       population.crossover();
       population.mutation();
       // ================================================================================================================
