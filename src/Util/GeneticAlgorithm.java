@@ -17,7 +17,7 @@ public class GeneticAlgorithm {
   private Population population;
   private static BufferedWriter writer; // for the csv
 
-  private final float mutationRate = 0.01f;
+  private final float mutationRate = 0.02f;
   private final float crossoverRate = 0.25f;
 
   /* headline for csv only static once */
@@ -58,7 +58,7 @@ public class GeneticAlgorithm {
       logGeneration(genCounter);
 
       // save best folding overall generations
-      if (population.getFitnessOfBestFolding() > bestFolding.analyzeFolding(population.getSequence()))
+      if (population.getBestFolding().getFitness() > bestFolding.analyzeFolding(population.getSequence()))
         bestFolding = population.getBestFolding();
 
       population = new Population(population.getSequence(), fitnessProportionateSelection(population)); // 4. find best candidates and move on to next generation
@@ -89,7 +89,7 @@ public class GeneticAlgorithm {
       String formatString = String.format("%d;%f;%f;%f;%d;%d\n",
           currentGen,                                           // Generation Number
           population.getAverageFitness(),                       // Average Fitness of Generation
-          population.getFitnessOfBestFolding(),                 // Fitness of best candidate of Generation
+          population.getBestFolding().getFitness(),             // Fitness of best candidate of Generation
           bestFolding.analyzeFolding(population.getSequence()), // Best Fitness
           bestFolding.getEnergy(),                              // Best Energy
           bestFolding.getOverlaps());                           // Best Overlaps

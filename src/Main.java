@@ -11,7 +11,7 @@ public class Main {
   public static void main(String[] args) throws IOException {
 
     int popultationSize = 100;
-    int generations = 100;
+    int generations = 2000;
     Imaging i = new Imaging();
 
     // SEQUENCE

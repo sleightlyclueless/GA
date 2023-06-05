@@ -84,16 +84,6 @@ public class Population {
     return bestFolding;
   }
 
-  // same as before but just get the int value of Fitness
-  public float getFitnessOfBestFolding() {
-    float bestFitness = 0;
-    for (Folding folding : this.generation)
-      if (folding.analyzeFolding(sequence) > bestFitness)
-        bestFitness = folding.analyzeFolding(sequence);
-
-    return bestFitness;
-  }
-
   // map function to get average of all generations
   // ("optimized" to the max from intelliJ
   public float getAverageFitness() {
@@ -104,10 +94,10 @@ public class Population {
   // P3
   // ================================================================================================================
   public void mutation() {
+    int toMutate = calculateElements(this.mutationRate);
     Random rng = new Random();
-    int elementsToMutate = calculateElements(this.mutationRate);
-    System.out.println(String.format("Mutating %d elements", elementsToMutate));
-    for (int i = 0; i < elementsToMutate; i++) {
+
+    for (int i = 0; i < toMutate; i++) {
       generation.get(rng.nextInt(populationSize)).mutate();
     }
   }
@@ -115,11 +105,15 @@ public class Population {
   public void crossover() {
     int toCrossover = calculateElements(this.crossoverRate);
     Random rng = new Random();
+
     for (int i = 0; i < toCrossover; i++) {
+      // Same element selected twice - avoid performing a crossover between element and itself.
       int f1 = rng.nextInt(sequence.length());
       int f2 = rng.nextInt(sequence.length());
       if (f1 == f2)
         continue;
+
+      // select a random position to cross and switch directions
       int positionToCross = rng.nextInt(sequence.length());
       generation.get(f1).crossover(generation.get(f2), positionToCross);
     }

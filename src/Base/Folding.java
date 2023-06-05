@@ -25,6 +25,7 @@ public class Folding {
   public List<Direction> getDirections()  {return this.directions;}
   public int getOverlaps()                {return this.overlaps;}
   public int getEnergy()                  {return this.energy;}
+  public float getFitness()               {return this.fitness;}
 
 
   /* Constructor */
@@ -198,7 +199,7 @@ public class Folding {
 
   // P3
   // ================================================================================================================
-  // Mutate a direction at a random place of the folding
+  // Mutate a direction at a random place of the folding - change 1 direction
   public void mutate() {
     int position = new Random().nextInt(directions.size());
     this.directions.set(position, Direction.getRandomDirection());
@@ -206,7 +207,7 @@ public class Folding {
   }
 
 
-  // Crossover directions of two foldings of same size (we have the same sequence, nothing to change here)
+  // Crossover directions of two foldings of same size (we have the same sequence, nothing to change here) - crossover directions
   public void crossover(Folding toCrossoverWith, int positionToCross) {
     int size = directions.size();
 
