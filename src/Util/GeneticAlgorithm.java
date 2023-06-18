@@ -18,7 +18,7 @@ public class GeneticAlgorithm {
   private static BufferedWriter writer; // for the csv
 
   private final float mutationRate = 0.02f;
-  private final float crossoverRate = 0.25f;
+  private final float crossoverRate = 0.05f;
 
   /* headline for csv only static once */
   static {

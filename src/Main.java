@@ -10,8 +10,8 @@ import java.util.List;
 public class Main {
   public static void main(String[] args) throws IOException {
 
-    int popultationSize = 100;
-    int generations = 2000;
+    int popultationSize = 1000;
+    int generations = 10000;
     Imaging i = new Imaging();
 
     // SEQUENCE
