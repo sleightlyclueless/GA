@@ -27,6 +27,8 @@ public class GeneticAlgorithm {
   private float mutationRate;
   private final float initialMutationRate = 0.02f;
 
+  private int selectionChoice = -1;
+
   /* headline for csv only static once */
   static {
     try {
@@ -38,7 +40,7 @@ public class GeneticAlgorithm {
   }
 
   /* Constructor */
-  public GeneticAlgorithm(int maxGen, int elementsPerGen, String sequence) {
+  public GeneticAlgorithm(int maxGen, int elementsPerGen, String sequence, int selection) {
     maxGenerations = maxGen;
     population = Population.randomPopulation(sequence, elementsPerGen);                             // 1. Random start population
 
@@ -48,6 +50,7 @@ public class GeneticAlgorithm {
     population.setMutationRate(mutationRate); // initial mutation rate
     population.setCrossoverRate(crossoverRate);
     // ================================================================================================================
+    selectionChoice = selection;
   }
 
 
@@ -70,8 +73,10 @@ public class GeneticAlgorithm {
         bestFolding = population.getBestFolding();
 
 
-      //population = new Population(population.getSequence(), fitnessProportionateSelection(population)); // 4. find best candidates and move on to next generation
-      population = new Population(population.getSequence(), tournamentSelection(population));
+      if (selectionChoice == 0)
+        population = new Population(population.getSequence(), fitnessProportionateSelection(population)); // 4. find best candidates and move on to next generation
+      else
+        population = new Population(population.getSequence(), tournamentSelection(population));
 
 
       // P4 & P5

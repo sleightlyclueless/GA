@@ -16,8 +16,9 @@ public class Main {
 
     // SEQUENCE
     String sequence = chooseStartSequence();
+    int selectionMethod = chooseSelectionMethod();
 
-    GeneticAlgorithm ga = new GeneticAlgorithm(generations, popultationSize, sequence);
+    GeneticAlgorithm ga = new GeneticAlgorithm(generations, popultationSize, sequence, selectionMethod);
 
     Folding best = ga.findBestFolding();
     i.drawFolding(best, sequence, "best_folding_gen_final.png");
@@ -40,10 +41,37 @@ public class Main {
     for (String s : sequences)
       System.out.println(String.format("[%d] %s", counter++, s));
 
-    System.out.println("Please select one of the sequences my number");
+    System.out.println("Please select one of the sequences by number");
     int selection = Integer.parseInt(reader.readLine());
+    while (selection < 0 || selection > counter-1) {
+      System.out.println("Err: Please choose one of the sequences by number");
+      selection = Integer.parseInt(reader.readLine());
+    }
 
     return sequences.get(selection);
+  }
+
+  private static int chooseSelectionMethod() throws IOException {
+    BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+
+    // 0 - hydrophil | 1 - hydrophobe
+    List<String> sequences = Arrays.asList(
+        "FitnessProportionateSelection",
+        "TournamentSelection"
+    );
+
+    int counter = 0;
+    for (String s : sequences)
+      System.out.println(String.format("[%d] %s", counter++, s));
+
+    System.out.println("Please select one of the selection methods");
+    int selection = Integer.parseInt(reader.readLine());
+    while (selection < 0 || selection > counter-1) {
+      System.out.println("Err: Please choose one of the selection methods by number");
+      selection = Integer.parseInt(reader.readLine());
+    }
+
+    return selection;
   }
 }
 

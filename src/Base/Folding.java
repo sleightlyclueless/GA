@@ -42,7 +42,7 @@ public class Folding {
     /* Sequence and directions have to match in order for successful folding generation */
     if (this.directions.size() + 1 != sequence.length()) return -1;
 
-    /* If theres already a fitness we elavuated already */
+    /* If theres already a fitness we evaluated already */
     if (this.fitness >= 0) return fitness;
 
 
