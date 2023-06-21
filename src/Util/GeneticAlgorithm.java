@@ -104,8 +104,8 @@ public class GeneticAlgorithm {
 
   // P4 & P5
   // ================================================================================================================
-  private float calculateNewMutationRate(float oldRate){
-    return mutationRate = Float.max(0, oldRate - initialMutationRate / maxGenerations);
+  private float calculateNewMutationRate(float oldRate){                                            // continuously lower mutation rate by subtracting from it a fraction of the original mutationrate / generationsize
+    return mutationRate = Float.max(0, oldRate - initialMutationRate / maxGenerations);       // 0.02 - (0.02 / 1000) = 0.02 - 0.00002 = 0.01998 | 0.01998 - (0.02 / 1000) etc. (ending in 0)
   }
 
 
@@ -138,17 +138,15 @@ public class GeneticAlgorithm {
     Random rng = new Random();
     List<Folding> newPopulation = new ArrayList<>(population.getGeneration().size());
 
-    for (int i = 0; i < population.getGeneration().size(); i++) {                                   // loop population size 1-x: same size generated again
-      // random value for selection, generated out of popFit - has to be surpassed by threshold
-      double selectedVal = rng.nextDouble() * popFit; // fitness proportionate: rng value between 0 - 1 * total fitness as threshold
-
+    for (int i = 0; i < population.getGeneration().size(); i++) {                                   // 2. loop population size 1-x: same size generated again
+      double selectedVal = rng.nextDouble() * popFit;                                               // random value to be surpassed by threshold, generated out of popFit * rng value between 0 - 1
 
       float threshold = 0;
       for (Folding f : population.getGeneration()) {                                                // go through each folding of population
-        threshold += f.analyzeFolding(population.getSequence());
+        threshold += f.analyzeFolding(population.getSequence());                                    // add up threshold with the fitness of each folding
 
-        if(threshold >= selectedVal) {                                                              // surpassed threshold - take that folding - break and start over until x foldings
-          newPopulation.add(new Folding(f.getDirections()));
+        if(threshold >= selectedVal) {                                                              // surpassed threshold - take that folding and start (high fitness higher chance to surpass threshold but also smaller fair chance for others)
+          newPopulation.add(new Folding(f.getDirections()));                                        // NOTE: Make sure to add new to avoid deep copies
           break;
         }
 
@@ -161,34 +159,32 @@ public class GeneticAlgorithm {
   // P4 & P5
   // ================================================================================================================
   private List<Folding> tournamentSelection(Population population) {
-    String sequence = population.getSequence();
-    final int k = 2;
-    double t = 0.75;
-
+    final int k = 2;                                                                                // amount of candidates in tournament
     List<Folding> newGeneration = new ArrayList<>();
 
-    while (newGeneration.size() < population.getGeneration().size()) {
+    while (newGeneration.size() < population.getGeneration().size()) {                              // 4. until we have a new generation with same size
       List<Folding> tournamentCandidates = new ArrayList<>();
-      for (int i = 0; i < k; i++) {
+      for (int i = 0; i < k; i++) {                                                                 // 1. choose k random candidates out of population
         int aminoSelection = new SplittableRandom().nextInt(population.getGeneration().size());
         tournamentCandidates.add(population.getGeneration().get(aminoSelection));
       }
-      newGeneration.add(tournament(tournamentCandidates, sequence, t));
+      newGeneration.add(tournament(tournamentCandidates, population.getSequence()));                // 2. tournament between those candidates
     }
     return newGeneration;
   }
 
-  private Folding tournament(List<Folding> tournamentCandidates, String sequence, double t) {
+  private Folding tournament(List<Folding> tournamentCandidates, String sequence) {
+    double t = 0.75;                                                                                // 75% chance of the higher fitness to win in tournament
     Folding winner = tournamentCandidates.get(0);
 
-    for (Folding folding :
-        tournamentCandidates) {
+    for (Folding folding : tournamentCandidates) {                                                  // loop through all candidates
       if (folding.analyzeFolding(sequence) > winner.analyzeFolding(sequence)){
-        winner = folding;
-      } else if(t< new SplittableRandom().nextDouble())
-        winner = folding;
+        winner = folding;                                                                           // if a candidate with a higher fitness is found override first per default
+      }
+      else if(t< new SplittableRandom().nextDouble())
+        winner = folding;                                                                           // however: with a 25% chance of a candidate with a lower fitness override to the new one anyway
     }
-    return new Folding(winner.getDirections());
+    return new Folding(winner.getDirections());                                                     // 3. winner gets added to new generation
   }
 }
 
