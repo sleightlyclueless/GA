@@ -160,17 +160,17 @@ public class GeneticAlgorithm {
   // ================================================================================================================
   private List<Folding> tournamentSelection(Population population) {
     final int k = 2;                                                                                // amount of candidates in tournament
-    List<Folding> newGeneration = new ArrayList<>();
+    List<Folding> newPopulation = new ArrayList<>();
 
-    while (newGeneration.size() < population.getGeneration().size()) {                              // 4. until we have a new generation with same size
+    while (newPopulation.size() < population.getGeneration().size()) {                              // 4. until we have a new generation with same size
       List<Folding> tournamentCandidates = new ArrayList<>();
       for (int i = 0; i < k; i++) {                                                                 // 1. choose k random candidates out of population
         int aminoSelection = new SplittableRandom().nextInt(population.getGeneration().size());
         tournamentCandidates.add(population.getGeneration().get(aminoSelection));
       }
-      newGeneration.add(tournament(tournamentCandidates, population.getSequence()));                // 2. tournament between those candidates
+      newPopulation.add(tournament(tournamentCandidates, population.getSequence()));                // 2. tournament between those candidates
     }
-    return newGeneration;
+    return newPopulation;
   }
 
   private Folding tournament(List<Folding> tournamentCandidates, String sequence) {
