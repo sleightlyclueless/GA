@@ -20,11 +20,10 @@ public class GeneticAlgorithm {
 
   // P3
   // ================================================================================================================
-  //private final float mutationRate = 0.02f;
+  private float mutationRate = 0.05f;
   private final float crossoverRate = 0.05f;
   // P4 & P5
   // ================================================================================================================
-  private float mutationRate;
   private final float initialMutationRate = 0.02f;
 
   private int selectionChoice = -1;
@@ -81,6 +80,8 @@ public class GeneticAlgorithm {
 
       // P4 & P5
       // =============================================================================================================
+      // HERE
+      //population.setMutationRate(mutationRate);
       population.setMutationRate(calculateNewMutationRate(mutationRate));
       // P3
       // ================================================================================================================

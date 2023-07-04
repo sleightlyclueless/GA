@@ -10,7 +10,7 @@ import java.util.List;
 public class Main {
   public static void main(String[] args) throws IOException {
 
-    int popultationSize = 100;
+    int popultationSize = 5000;
     int generations = 1000;
     Imaging i = new Imaging();
 
@@ -34,7 +34,9 @@ public class Main {
         "0010011000011000011000011",                          // Seq25
         "000110011000001111111001100001100100",               // Seq36
         "001001100110000011111111110000001100110010011111",   // Seq48
-        "11010101011110100010001000010001000101111010101011"  // Seq50
+        "11010101011110100010001000010001000101111010101011", // Seq50
+        "001110111111110001111111111010001111111111110000111111011010", // Seq60
+        "1111111111110101001100110010011001100100110011001010111111111111" // Seq64
     );
 
     int counter = 0;
